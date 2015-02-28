@@ -10,9 +10,10 @@
  * @license GPL v3
  */
 
+ini_set('mongo.long_as_object', 1);
 require_once 'resources/php/load.php';
 
-if($showUserPassword) : ?>
+if($showUserPassword) { ?>
 <div class="col-md-offset-4">
 	<form role="form" class="col-md-5">
 		<h3 class="text-muted">moa[db]</h3>
@@ -28,31 +29,31 @@ if($showUserPassword) : ?>
 		<button type="submit" class="btn btn-default">Submit</button>
 	</form>
 	</div>
-<? exit; endif; ?>
+<?php exit; } ?>
 
 <div class="container">
 	<div class="header">
-        <ul class="nav nav-pills pull-right">
-			<?php if ($hasCollection) : ?>
+		<ul class="nav nav-pills pull-right">
+			<?php if ($hasCollection) { ?>
 				<li class="active"><a data-view="CollectionRow" href="<?= $baseUrl ?>?db=<?= $db ?>&action=listRows&collection=<?= $collection ?>">&nbsp;<icon class="icon-list">&nbsp;</icon></a></li>
-			<? endif; ?>
-			<?php if ($hasDB) : ?>
+			<?php } ?>
+			<?php if ($hasDB) { ?>
 				<li <?= $hasCollection ? '' : 'class="active"' ?>><a data-view="Collections" href="<?= $baseUrl ?>?db=<?= $db ?>"><icon class="icon-inbox"></icon> Collections</a></li>
-			<?php endif; ?>
+			<?php } ?>
 			<li <?= $hasDB ? '' : 'class="active"' ?>><a data-view="Databases" href="<?= $baseUrl ?>"><icon class="icon-hdd"></icon> Databases</a></li>
 			<li><a class="divider">|</a></li>
 			<li><a id="edit-button"><icon class="icon-pencil"></icon> Edit</a></li>
 			<li><a data-popup data-title="<?= $hasDB ? ($hasCollection ? 'New Object' : 'New Collection') : 'New Database"' ?>" data-body="<?= $hasDB ? ($hasCollection ? '#new-object' : '#new-collection') : '#new-database"' ?>"><icon class="icon-plus-sign-alt"></icon> <?= $hasCollection ? 'Insert' : 'Add' ?></a></li>
-        </ul>
-        <h3 class="text-muted">moa[db]</h3>
+		</ul>
+		<h3 class="text-muted">moa[db]</h3>
 	</div>
 
 	<div class="jumbotron">
 		<div class="row marketing <?= $hasDB ? 'noMargin' : '' ?>">
 			<?php
-			if (!$hasDB) :
+			if (!$hasDB) {
 				$newRow = 0;
-				foreach ($mo->mongo['dbs'] as $db => $desc):
+				foreach ($mo->mongo['dbs'] as $db => $desc) {
 					?>
 					<div class="col-lg-3 database click">
 						<?= $html->link("javascript: dropDatabase('" . get::htmlentities($db) . "'); void(0);", '&times;', ['class' => 'close hidden', 'title' => 'Drop Database']) ?>
@@ -61,21 +62,21 @@ if($showUserPassword) : ?>
 						<p><?= $desc ?></p>
 					</div>
 					<?php
-				endforeach;
-			elseif ($hasDB) :
-				if (isset($mo->mongo['listCollections'])) :
+				}
+			} else if ($hasDB) {
+				if (isset($mo->mongo['listCollections'])) {
 					?>
 					<div id="mongo_collections" class="side-nav">
 						<?php
-						if (!$mo->mongo['listCollections']) :
+						if (!$mo->mongo['listCollections']) {
 							echo $html->div('No collections exist');
-						else :
+						} else {
 							?>
 							<table class="table collection click">
 								<tbody>
 									<?php
 									$totalcount = 0;
-									foreach ($mo->mongo['listCollections'] as $col => $rowCount) :
+									foreach ($mo->mongo['listCollections'] as $col => $rowCount) {
 										$totalcount += $rowCount;
 										?>
 										<tr>
@@ -86,11 +87,11 @@ if($showUserPassword) : ?>
 									<td><?= $html->link($baseUrl . '?db=' . $dbUrl . '&action=listRows&collection=' . urlencode($col), $col, ['class' => '']) ?></td>
 									<td><small title="<?= number_format($rowCount) ?>"><?= '(' . $html->bd_nice_number($rowCount) . ')' ?></small></td>
 									</tr>
-								<?php endforeach; ?>
+								<?php } ?>
 								</tbody>
 							</table>
-						<?
-						endif;
+						<?php
+						}
 						$url = $baseUrl . '?' . http_build_query($_GET);
 						if (isset($collection)) {
 							$url .= '&collection=' . urlencode($collection);
@@ -103,25 +104,25 @@ if($showUserPassword) : ?>
 //						'style' => 'width: 40px;'))
 //					. $form->submit(array('value' => 'limit', 'class' => 'ui-state-hover'))
 //					. $form->close();
-//					
+//
 						?>
 					</div>
-					<?
-				endif;
-			endif;
+					<?php
+				}
+			}
 			?>
 			<div id="main-content">
 				<?php
 				//stats on main page
-				if ($hasDB && isset($mo->mongo['getStats'])) :
+				if ($hasDB && isset($mo->mongo['getStats'])) {
 					?>
 					<div class="content-scroll full">
 						<div class="alert alert-success stats">You have <?= number_format($totalcount) ?> records and <?= count($mo->mongo['listCollections']) ?> collections.</div>
-						<div class="alert alert-info stats <?= $totalcount > 0 ? 'opacity' : '' ?>">To add a new collection click 'Add' in the top right-hand corner.</div>	
+						<div class="alert alert-info stats <?= $totalcount > 0 ? 'opacity' : '' ?>">To add a new collection click 'Add' in the top right-hand corner.</div>
 						<table class="table stats">
 							<tbody>
 								<tr><td><h4>Database : <?= $db ?></h4></td></tr>
-								<?php foreach ($mo->mongo['getStats'] as $key => $val) : ?>
+								<?php foreach ($mo->mongo['getStats'] as $key => $val) { ?>
 									<tr>
 										<td>
 											<?php
@@ -137,12 +138,12 @@ if($showUserPassword) : ?>
 											?>
 										</td>
 									</tr>
-								<? endforeach; ?>
+								<?php } ?>
 							</tbody>
 						</table>
 					</div>
 					<?php
-				endif;
+				}
 				unset($mo->mongo['getStats']);
 
 				//show collection object list
@@ -277,18 +278,18 @@ if($showUserPassword) : ?>
 								<?php
 								$defaultCols = ['_id' => '_id'];
 								$colKeys = array_merge($defaultCols, $colKeys);
-								foreach ($colKeys as $k => $v) :
+								foreach ($colKeys as $k => $v) {
 									?>
 									<option value="<?= $k ?>" <?= isset($_GET['sort']) && $_GET['sort'] === $k ? 'selected' : '' ?>><?= $v ?></option>
-								<?php endforeach; ?>
+								<?php } ?>
 							</select><br>
 							<select name="sortdir" id="sortdir" class="form-control">
 								<option value="1" <?= isset($_GET['sortdir']) && $_GET['sortdir'] == 1 ? 'selected' : '' ?>>asc</option>
 								<option value="-1" <?= isset($_GET['sortdir']) && $_GET['sortdir'] == -1 ? 'selected' : '' ?>>desc</option>
 							</select><br>
-							<?php if (isset($_GET['sort'])) : ?>
+							<?php if (isset($_GET['sort'])) { ?>
 								<a href="<?= $baseUrl ?>?db=<?= $db ?>&action=listRows&collection=<?= $collection ?>" class="btn btn-default">Clear sorting options</a>
-							<?php endif; ?>
+							<?php } ?>
 						</div><?php
 					$linkSearchClass = isset($_GET['search']) ? ' running' : '';
 					$search = ['id' => 'searchlink',
@@ -306,16 +307,16 @@ if($showUserPassword) : ?>
 								<?php
 								$defaultCols = ['_id' => '_id'];
 								$colKeys = array_merge($defaultCols, $colKeys);
-								foreach ($colKeys as $k => $v) :
+								foreach ($colKeys as $k => $v) {
 									?>
 									<option value="<?= $k ?>" <?= isset($_GET['searchField']) && $_GET['searchField'] === $k ? 'selected' : '' ?>><?= $v ?></option>
-								<?php endforeach; ?>
+								<?php } ?>
 							</select><br>
 							<input type="text" name="search" id="search" class="form-control input-lg"  placeholder="Search..." value="<?= isset($_GET['search']) ? $_GET['search'] : '' ?>">
 							<br>
-							<?php if (isset($_GET['search'])) : ?>
+							<?php if (isset($_GET['search'])) { ?>
 								<a href="<?= $baseUrl ?>?db=<?= $db ?>&action=listRows&collection=<?= $collection ?>" class="btn btn-default">Clear search options</a>
-							<?php endif; ?>
+							<?php } ?>
 						</div><?php
 				}
 
@@ -476,18 +477,18 @@ if($showUserPassword) : ?>
 		<div class="alert alert-danger hidden">Invalid json or dot-notation query, e.g. {"values.text.value":"ABC"}.</div>
 		<textarea data-type="query" id="find" rows="4" class="form-control input-lg" placeholder="{ Enter query }"><?= isset($_GET['find']) ? $_GET['find'] : '' ?></textarea>
 		<small class="help-block">Need help? Check out the documentation here : <a href="http://docs.mongodb.org/manual/reference/method/db.collection.find/">Mongo Query Find</a></small>
-		<?php if (isset($_GET['find'])) : ?>
+		<?php if (isset($_GET['find'])) { ?>
 			<a href="<?= $baseUrl ?>?db=<?= $db ?>&action=listRows&collection=<?= $collection ?>" class="btn btn-default">Clear query find</a>
-		<?php endif; ?>					
+		<?php } ?>
 	</div>
 
 	<div id="removeform" class="hidden">
 		<form action="<?= $baseUrl ?>?db=<?= $db ?>&action=listRows&collection=<?= $collection ?>&remove=query&request=<?= time() ?>" method="post" data-type="removeQuery">
-			<p class="alert alert-info">You can also remove objects manually by closing this panel and clicking the 'Edit' button in the top right-hand corner. Please take care when removing via query.</p>				
+			<p class="alert alert-info">You can also remove objects manually by closing this panel and clicking the 'Edit' button in the top right-hand corner. Please take care when removing via query.</p>
 			<div class="alert alert-warning hidden">Invalid quotations, try to <a class="swopquote">correct</a>?</div>
 			<div class="alert alert-danger hidden">Invalid json or dot-notation query, try again.</div>
 			<textarea id="removeQuery" rows="2" name="remove" class="form-control input-lg" placeholder="{ Remove query }"><?= isset($_POST['remove']) ? $_POST['remove'] : '' ?></textarea>
-			<small class="help-block">Need help? Check out the documentation here : <a href="http://docs.mongodb.org/manual/reference/method/db.collection.remove/">Mongo Query Remove</a></small>				
+			<small class="help-block">Need help? Check out the documentation here : <a href="http://docs.mongodb.org/manual/reference/method/db.collection.remove/">Mongo Query Remove</a></small>
 		</form>
 	</div>
 
@@ -525,13 +526,13 @@ if($showUserPassword) : ?>
 
 
 	<div class="footer">
-        <p><small>Help contribute to <a href="https://github.com/lovetheidea/MoaDB">moaDB</a>. Report any bugs <a href="https://github.com/lovetheidea/MoaDB/issues">here.</a> |  Maintained and designed by lovetheidea</small></p>
+		<p><small>Help contribute to <a href="https://github.com/lovetheidea/MoaDB">moaDB</a>. Report any bugs <a href="https://github.com/lovetheidea/MoaDB/issues">here.</a> |  Maintained and designed by lovetheidea</small></p>
 	</div>
 
 </div> <!-- /container -->
-<script> 
+<script>
 	//<!-- original public functions -->
- 
+
 	var mo = {};
 	var urlEncode = function(str) {
 		return escape(str).replace(/\+/g, "%2B").replace(/%20/g, "+").replace(/\*/g, "%2A").replace(/\//g, "%2F").replace(/@/g, "%40");
@@ -541,7 +542,26 @@ if($showUserPassword) : ?>
 			//window.location.replace("' . $baseUrl . '?db=' . $dbUrl . '&action=repairDb");
 		}
 	};
-<?php if (!$hasDB) : ?>
+
+	$(document).delegate('textarea', 'keydown', function(e) { 
+		var keyCode = e.keyCode || e.which; 
+
+		if (keyCode == 9) { 
+			e.preventDefault(); 
+			var start = $(this).get(0).selectionStart;
+			var end = $(this).get(0).selectionEnd;
+
+			// set textarea value to: text before caret + tab + text after caret
+			$(this).val($(this).val().substring(0, start)
+						+ "\t"
+						+ $(this).val().substring(end));
+
+			// put caret at right position again
+			$(this).get(0).selectionStart = 
+			$(this).get(0).selectionEnd = start + 1;
+		} 
+	});
+<?php if (!$hasDB) { ?>
 		var dropDatabase = function(db) {
 			if(confirm("Are you sure that you want to drop the " + db + " database?")) {
 				if(confirm("All the collections in the " + db + " database will be lost along with all the data within them!"
@@ -551,7 +571,7 @@ if($showUserPassword) : ?>
 				}
 			}
 		};
-<?php elseif ($hasCollection) : ?>
+<?php } else if ($hasCollection) { ?>
 		var removeObject = function(_id, idType) {
 			if(confirm("Are you sure that you want to delete this " + _id + " object?")) {
 				window.location.replace("<?= $baseUrl . '?db=' . $db . '&collection=' . urlencode($collection)
@@ -559,12 +579,11 @@ if($showUserPassword) : ?>
 	?>" + urlEncode(_id) + "&idtype=" + idType);
 							}
 						};
-<?php else : ?>
+<?php } else { ?>
 		var collectionDrop = function(collection) {
 			if(confirm("Are you sure that you want to drop " + collection + "?")){
 				window.location.replace("<?= $baseUrl . '?db=' . $db . '&collection=' ?>" + collection + "<?= '&action=dropCollection' ?>");
 							}
 						};
-<?php endif; ?>
+<?php } ?>
 </script>
-
